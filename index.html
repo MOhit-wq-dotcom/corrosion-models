@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CO2 Corrosion Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --white: #ffffff;
+        --border: #e4e7ec;
+        --text: #111827;
+        --sub: #6b7280;
+        --accent: #1a56db;
+        --accent-hover: #1648c0;
+        --rust: #c84b0f;
+        --rust-hover: #a83c0b;
+        --shadow: 0 1px 3px rgba(0, 0, 0, 0.07), 0 8px 24px rgba(0, 0, 0, 0.06);
+        --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1), 0 16px 40px rgba(0, 0, 0, 0.09);
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        font-family: Inter, "Segoe UI", Arial, Helvetica, sans-serif;
+        background: var(--white);
+        color: var(--text);
+      }
+
+      .page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 24px;
+        background:
+          radial-gradient(ellipse 60% 40% at 50% -10%, rgba(26, 86, 219, 0.06) 0%, transparent 70%),
+          var(--white);
+      }
+
+      .eyebrow {
+        margin-bottom: 14px;
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 540px;
+        color: var(--text);
+        font-family: "Space Grotesk", Inter, sans-serif;
+        font-size: clamp(26px, 4vw, 40px);
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: 0;
+        text-align: center;
+      }
+
+      h1 sub {
+        font-size: 0.65em;
+        vertical-align: baseline;
+      }
+
+      .subtitle {
+        max-width: 420px;
+        margin-top: 12px;
+        color: var(--sub);
+        font-size: 15px;
+        line-height: 1.6;
+        text-align: center;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        width: min(620px, 100%);
+        margin-top: 26px;
+      }
+
+      .stat {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.86);
+        text-align: center;
+      }
+
+      .stat strong {
+        display: block;
+        font-family: "Space Grotesk", Inter, sans-serif;
+        font-size: 20px;
+        line-height: 1;
+      }
+
+      .stat span {
+        display: block;
+        margin-top: 7px;
+        color: var(--sub);
+        font-size: 11.5px;
+        line-height: 1.35;
+      }
+
+      .divider {
+        width: 40px;
+        height: 2px;
+        margin: 32px auto;
+        border-radius: 2px;
+        background: var(--border);
+      }
+
+      .cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+        max-width: 780px;
+      }
+
+      .card {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 340px;
+        min-height: 330px;
+        padding: 32px 28px 28px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: var(--white);
+        color: inherit;
+        box-shadow: var(--shadow);
+        text-decoration: none;
+        cursor: pointer;
+        transition: box-shadow 220ms ease, transform 220ms ease, border-color 220ms ease;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 3px;
+        border-radius: 16px 16px 0 0;
+      }
+
+      .card--blue::before {
+        background: var(--accent);
+      }
+
+      .card--rust::before {
+        background: var(--rust);
+      }
+
+      .card:hover {
+        border-color: transparent;
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-3px);
+      }
+
+      .card:focus-visible {
+        outline: 3px solid rgba(26, 86, 219, 0.22);
+        outline-offset: 4px;
+      }
+
+      .badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        margin-bottom: 4px;
+        border-radius: 10px;
+      }
+
+      .badge--blue {
+        background: rgba(26, 86, 219, 0.08);
+      }
+
+      .badge--rust {
+        background: rgba(200, 75, 15, 0.08);
+      }
+
+      .badge svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .badge--blue svg {
+        stroke: var(--accent);
+      }
+
+      .badge--rust svg {
+        stroke: var(--rust);
+      }
+
+      .card-tag {
+        color: var(--sub);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .card-title {
+        color: var(--text);
+        font-family: "Space Grotesk", Inter, sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.25;
+      }
+
+      .card-desc {
+        flex: 1;
+        color: var(--sub);
+        font-size: 13.5px;
+        line-height: 1.55;
+      }
+
+      .card-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+      }
+
+      .pill {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 6px 10px;
+        color: var(--sub);
+        font-size: 11.5px;
+        font-weight: 500;
+      }
+
+      .card-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        width: fit-content;
+        margin-top: 8px;
+        padding: 9px 18px;
+        border: 0;
+        border-radius: 8px;
+        color: #ffffff;
+        font: inherit;
+        font-size: 13.5px;
+        font-weight: 500;
+        cursor: pointer;
+        pointer-events: none;
+        transition: background 180ms ease;
+      }
+
+      .card--blue .card-cta {
+        background: var(--accent);
+      }
+
+      .card--blue:hover .card-cta {
+        background: var(--accent-hover);
+      }
+
+      .card--rust .card-cta {
+        background: var(--rust);
+      }
+
+      .card--rust:hover .card-cta {
+        background: var(--rust-hover);
+      }
+
+      .card-cta svg {
+        width: 13px;
+        height: 13px;
+        stroke: #ffffff;
+        transition: transform 180ms ease;
+      }
+
+      .card:hover .card-cta svg {
+        transform: translateX(3px);
+      }
+
+      footer {
+        margin-top: 52px;
+        color: #a7afbd;
+        font-size: 12px;
+        text-align: center;
+      }
+
+      @media (max-width: 720px) {
+        .stats {
+          grid-template-columns: 1fr;
+          max-width: 340px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .page {
+          padding: 40px 18px;
+        }
+
+        .card {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <p class="eyebrow">Corrosion Engineering Suite</p>
+      <h1>CO<sub>2</sub> Corrosion Rate Calculators</h1>
+      <p class="subtitle">Select a prediction model below to open the corresponding calculator tool.</p>
+
+      <section class="stats" aria-label="Portal statistics">
+        <div class="stat">
+          <strong>2</strong>
+          <span>Hosted corrosion tools</span>
+        </div>
+        <div class="stat">
+          <strong>CO<sub>2</sub></strong>
+          <span>Corrosion focus</span>
+        </div>
+        <div class="stat">
+          <strong>Web</strong>
+          <span>Direct model access</span>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <div class="cards">
+        <a class="card card--blue" href="https://norsok-model.onrender.com/">
+          <div class="badge badge--blue" aria-hidden="true">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.7" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25A2.25 2.25 0 0 1 5.25 3h13.5A2.25 2.25 0 0 1 21 5.25z"/>
+            </svg>
+          </div>
+          <span class="card-tag">Standard Model</span>
+          <div class="card-title">NORSOK M-506 Rev. 2<br>CO<sub>2</sub> Corrosion Calculator</div>
+          <p class="card-desc">
+            The NORSOK corrosion model estimates CO2 corrosion in carbon steel systems using process conditions such as temperature, pressure, pH, flow regime, wall shear stress, and fluid composition. It supports engineering assessment of pipelines and production facilities by applying recognized industry guidance to predict corrosion rate trends and compare operating scenarios for safer material selection, monitoring, mitigation, and maintenance planning decisions.
+          </p>
+          <div class="card-meta">
+            <span class="pill">Render hosted</span>
+            <span class="pill">Model 01</span>
+          </div>
+          <span class="card-cta">
+            Open Model
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+            </svg>
+          </span>
+        </a>
+
+        <a class="card card--rust" href="https://ongc-corrosion-predictor.onrender.com/">
+          <div class="badge badge--rust" aria-hidden="true">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.7" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5 14.25 2.25 12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+            </svg>
+          </div>
+          <span class="card-tag">Predictive Model</span>
+          <div class="card-title">de Waard-Milliams<br>CO<sub>2</sub> Corrosion Model</div>
+          <p class="card-desc">
+            The de Waard-Milliams model predicts CO<sub>2</sub> corrosion in carbon steel by relating corrosion rate to operating temperature, CO<sub>2</sub> partial pressure, fluid chemistry, and environmental correction factors. It is widely used for oil and gas production systems to estimate baseline sweet corrosion risk, screen operating conditions, and support decisions on inhibition, inspection frequency, and pipeline integrity management.
+          </p>
+          <div class="card-meta">
+            <span class="pill">Render hosted</span>
+            <span class="pill">Model 02</span>
+          </div>
+          <span class="card-cta">
+            Open Model
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <footer>Both tools open from their hosted web applications.</footer>
+    </main>
+  </body>
+</html>
